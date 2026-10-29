@@ -1,0 +1,55 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Tests of the checks
+        run: python -m unittest discover -s tests -v
+
+      - name: Check the tree
+        run: python scripts/check_tree.py
+
+      - name: Check the skills against the contract
+        run: python scripts/check_contract.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Keep the version in step with the one used locally
+      - name: Install Claude Code
+        run: npm install --global @anthropic-ai/claude-code@2.1.310
+
+      # claude plugin validate needs no login, API key or network (checked on 2.1.310
+      # with an empty home, no auth variable and a dead proxy), so no secret is passed.
+      # The variables only stop the CLI from phoning home or updating itself.
+      - name: Validate the plugin
+        env:
+          DISABLE_TELEMETRY: "1"
+          DISABLE_AUTOUPDATER: "1"
+          CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
+        run: claude plugin validate --strict plugins/kai
+
+      - name: Validate the marketplace
+        env:
+          DISABLE_TELEMETRY: "1"
+          DISABLE_AUTOUPDATER: "1"
+          CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
+        run: claude plugin validate --strict .

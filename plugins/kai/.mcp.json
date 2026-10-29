@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "kai": {
+      "type": "http",
+      "url": "https://wellbee-rag.duckdns.org/mcp"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "kai",
+  "version": "0.1.0",
+  "description": "Collega Claude ai documenti di KAI: elenca le fonti, cerca passaggi e legge i documenti dell'utente, in sola lettura.",
+  "author": {
+    "name": "Matteo Sardi"
+  },
+  "homepage": "https://github.com/Matte2712s/kai-claude-plugin",
+  "repository": "https://github.com/Matte2712s/kai-claude-plugin",
+  "license": "MIT",
+  "keywords": ["kai", "documenti", "ricerca", "mcp"]
+}

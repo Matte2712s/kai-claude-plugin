@@ -1,0 +1,20 @@
+{
+  "name": "kai",
+  "owner": {
+    "name": "Matteo Sardi"
+  },
+  "metadata": {
+    "description": "Plugin Claude per KAI: accesso in sola lettura ai documenti dell'utente."
+  },
+  "plugins": [
+    {
+      "name": "kai",
+      "source": "./plugins/kai",
+      "description": "Collega Claude ai documenti di KAI: elenca le fonti, cerca passaggi e legge i documenti, in sola lettura.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "homepage": "https://github.com/Matte2712s/kai-claude-plugin",
+      "keywords": ["kai", "documenti", "ricerca", "mcp"]
+    }
+  ]
+}
