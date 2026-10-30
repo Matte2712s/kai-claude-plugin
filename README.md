@@ -23,8 +23,10 @@ Dettagli, dati trattati e come scollegare: [plugins/kai/README.md](plugins/kai/R
 plugins/kai/                      il plugin (manifesto, .mcp.json, README, LICENSE, CHANGELOG)
 contract/mcp_tools.json           copia del contratto degli strumenti del server (vedi sotto)
 scripts/                          controlli usati dalla CI
-tests/                            test dei controlli
+scripts/build_release.py          costruisce lo zip del plugin (vedi Rilascio)
+tests/                            test dei controlli e dello script di rilascio
 .github/workflows/ci.yml          la CI
+.github/workflows/release.yml     il rilascio: da un tag vX.Y.Z crea lo zip e la release
 ```
 
 ## Contratto con il server
@@ -67,6 +69,31 @@ aggiornamento solo se cambia) e ogni rilascio ha una voce in `plugins/kai/CHANGE
 
 Per la pubblicazione nella directory dei plugin mancano ancora un'icona e l'indirizzo
 dell'informativa privacy (`claude plugin validate --strict --profile directory` li segnala).
+
+## Rilascio
+
+Lo zip del plugin e' quello che l'utente carica su claude.ai, Claude Desktop o Cowork con
+"carica .zip"; Claude Code usa invece il marketplace (vedi sopra). Per pubblicare una versione:
+
+1. cambia `version` in `plugins/kai/.claude-plugin/plugin.json` e in
+   `.claude-plugin/marketplace.json` (devono coincidere);
+2. aggiungi una voce `## X.Y.Z` in `plugins/kai/CHANGELOG.md`: il suo testo diventa le note
+   della release;
+3. fai il commit, poi `git tag vX.Y.Z` e `git push origin vX.Y.Z`.
+
+Dal tag parte `.github/workflows/release.yml`: esegue test e controlli, costruisce
+`kai-X.Y.Z.zip` (i file del plugin stanno alla radice dello zip, con
+`.claude-plugin/plugin.json`: niente cartella in testa e niente `bin/`), lo verifica, fa
+girare `claude plugin validate --strict` sullo zip estratto e lo allega alla release su
+GitHub. Il tag deve essere uguale a `v` + la versione del manifesto, altrimenti la
+costruzione si ferma.
+
+Per costruire lo zip in locale (finisce in `dist/`, che git ignora):
+
+```
+python scripts/build_release.py --out dist
+python scripts/build_release.py --out dist --tag vX.Y.Z --notes dist/notes.md
+```
 
 ## Licenza
 

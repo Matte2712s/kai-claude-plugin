@@ -3,4 +3,5 @@ __pycache__/
 .venv/
 .env
 *.zip
+dist/
 .DS_Store
